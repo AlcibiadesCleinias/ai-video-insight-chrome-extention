@@ -11,12 +11,12 @@
     },
     "permissions": ["scripting", "activeTab"],
     "action": {
-        "default_popup":"popup.html"
+        "default_popup":"popupView/popup.html"
     },
     "content_scripts": [
     {
       "matches": ["https://www.youtube.com/*"],
-      "js": ["main.js"],
+      "js": ["contentScripts/main.js"],
       "run_at": "document_end",
       "all_frames": true
     }
