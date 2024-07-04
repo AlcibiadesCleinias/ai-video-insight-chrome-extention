@@ -1,4 +1,4 @@
-from pydantic import BaseSettings
+from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):
@@ -9,7 +9,7 @@ class Settings(BaseSettings):
     REDIS_HOST: str
     REDIS_PORT: int = 6379
 
-    OPENAI_KEY: str
+    OPENAI_TOKEN: str
 
     class Config:
         case_sensitive = True

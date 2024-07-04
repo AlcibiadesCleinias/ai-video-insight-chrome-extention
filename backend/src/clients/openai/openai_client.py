@@ -141,7 +141,7 @@ class OpenAIClient(AIClientABC):
     async def get_video_summary_from_transcript(self, title, transcript: str) -> str:
         content = f"Video with title {title} consists the following transcript: {transcript}"
         return await self.api_client.get_chat_completions(
-            ChatMessage(role="user", content=content),
+            [ChatMessage(role="user", content=content)],
             chat_bot_goal=(
                 "Your task is to provide a one-sentence summary of the video content presented. "
                 "Ensure the summary captures the core message and key details effectively"
@@ -156,9 +156,27 @@ class OpenAIClient(AIClientABC):
         content = (f"Create summary to the following comments of the video title {title}, "
                    f"Note that comments sorted in descending order (from most liked to less): {comments_text}")
         return await self.api_client.get_chat_completions(
-            ChatMessage(role="user", content=content),
+            [ChatMessage(role="user", content=content)],
             chat_bot_goal=(
                 "Your task is to provide a one-sentence summary of the video comments (in dl;dr format). "
                 "Ensure the summary captures the core message and key details effectively"
+            )
+        )
+
+    async def get_click_bait_ratio_with_summary(
+            self, title: str, video_summary: str, likes: float, views: float, comments_total: Optional[int]=None) -> str:
+        content = (
+            f"Provide click-bait ratio for video with title: {title} transcript summary: {video_summary}. Likes: {likes}. Views: {views}"
+        )
+        if comments_total:
+            content += f". Total comments: {comments_total}"
+
+        return await self.api_client.get_chat_completions(
+            [ChatMessage(role="user", content=content)],
+            chat_bot_goal=(
+                "Your task is to provide a one-sentence (max 20 chars) analysis on the video click bait. "
+                "Ensure the click bait analysis captures all the provided features and key details effectively. "
+                "Format of the analysis should be: 'Ratio: from 0 to 100, where 100 is the most click bait'. Description: your text of summary."
+                "Short example: Ratio: 90. Low like-to-view ratio and the title doesn't match the content."
             )
         )

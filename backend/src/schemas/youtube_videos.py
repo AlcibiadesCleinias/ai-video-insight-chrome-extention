@@ -6,6 +6,6 @@ class YoutubeVideoIn(BaseModel):
 
 
 class YoutubeVideoOut(BaseModel):
-    clickbait_ratio: str
+    clickbait_ratio_summary: str
     video_summary: str
     comments_summary: str
