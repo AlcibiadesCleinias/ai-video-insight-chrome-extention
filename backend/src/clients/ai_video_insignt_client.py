@@ -27,6 +27,10 @@ class AIVideoInsightClient:
     async def get_insights(
             self, title: str, transcript: str, comments: List[Tuple[str, str]], likes: float, views: float
     ) -> schemas.YoutubeVideoOut:
+        """It tires to evaluate different strategies on how to get insights from the video.
+        If already to much time passed, it will ommit clickbait ratio.
+        # TODO: implememnt gridy strategy, add cach-ahead for video ids
+        """
 
         # TODO: use different models, and use the first answer available with e.g. asyncio.FIRST_COMPLETED
         try:
@@ -49,7 +53,7 @@ class AIVideoInsightClient:
                 clickbait_ratio_summary = CLICKBAIT_RATIO_NOT_AVAILABLE_TXT
         except Exception as e:
             logger.error(f"Failed to get insights: {e}, return simple answer...")
-            video_summary = transcript[:100]
+            video_summary = transcript[:100] if transcript else VIDEO_SUMMARY_NOT_AVAILABLE_TXT
             comments_summary = comments[0][1] if len(comments) > 0 else COMMENTS_SUMMARY_NOT_AVAILABLE_TXT
             clickbait_ratio_summary = CLICKBAIT_RATIO_NOT_AVAILABLE_TXT
 
