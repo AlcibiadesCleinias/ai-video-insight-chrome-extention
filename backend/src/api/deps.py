@@ -1,3 +1,4 @@
 from clients.ai_video_insignt_client import AIVideoInsightClient
+from config.settings import settings
 
-ai_video_insight_client = AIVideoInsightClient()
+ai_video_insight_client = AIVideoInsightClient(settings.OPENAI_KEY)

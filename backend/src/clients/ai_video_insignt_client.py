@@ -1,5 +1,5 @@
 import asyncio
-from typing import List
+from typing import List, Tuple
 
 import schemas
 from clients.ai_client import AIClientABC
@@ -21,7 +21,7 @@ class AIVideoInsightClient:
         self.ai_client = ai_client
 
     async def get_insights(
-            self, transcript: str, comments: List[(str, str)], likes: float, views: float
+            self, transcript: str, comments: List[Tuple[str, str]], likes: float, views: float
     ) -> schemas.YoutubeVideoOut:
 
         # TODO: use different models, and use the first answer available with e.g. asyncio.FIRST_COMPLETED
