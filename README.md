@@ -8,6 +8,9 @@ is ready, ratio is ready, etc.
 - caching: {on API level, for data fetching concurrent process}
 - add simple gridy arch: use different models (+ locally deployed) and return fisrt answer available (with e.g. asyncio.FIRST_COMPLETED)
 
+# Solution Architecture
+![Solution Architecture](./docs/solution-architecture.png)
+
 # Develop Locally
 First of all **git clone** and get your **OpenAI API key**, also note that to run backend you need **docker** & **docker compose** installed
 
