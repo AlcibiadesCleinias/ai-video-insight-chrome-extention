@@ -1,0 +1,3 @@
+from clients.ai_video_insignt_client import AIVideoInsightClient
+
+ai_video_insight_client = AIVideoInsightClient()
