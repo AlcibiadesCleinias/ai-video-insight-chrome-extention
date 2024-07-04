@@ -1,4 +1,7 @@
-class OpenAIClient:
+from clients.ai_client import AIClientABC
+
+
+class OpenAIClient(AIClientABC):
     async def get_video_summary_from_transcript(self, text: str) -> str:
         pass
 
