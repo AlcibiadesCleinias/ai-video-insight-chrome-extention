@@ -1,5 +1,8 @@
 from logging.config import dictConfig
 from fastapi import FastAPI
+from fastapi_cache import FastAPICache
+from fastapi_cache.backends.redis import RedisBackend
+from redis.asyncio import Redis
 from starlette.middleware.cors import CORSMiddleware
 
 from api.api import api_router
@@ -25,3 +28,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+@app.on_event("startup")
+async def startup():
+    redis = Redis(host=settings.REDIS_HOST, port=settings.REDIS_PORT, encoding="utf8", decode_responses=True)
+    FastAPICache.init(RedisBackend(redis), prefix="fastapi-cache")

@@ -3,7 +3,7 @@ const UPDATE_POPUP_POSITION_INTERVAL_MS = 100;
 const OBSERVE_VIDEOS_TIMEOUT_MS = 50;
 const FETCH_VIDEO_INFO_TIMEOUT_MS = 50;
 // TODO: change on deployed.
-const BACKEND_VIDEO_INSIGHTS_API = 'http://localhost:8000/api/v1/ai-insights/youtube'
+const BACKEND_VIDEO_INSIGHTS_API = 'http://localhost:8000/api/v1/ai-insights/youtube-videos/'
 
 const createPopup = () => {
     const popupElement = document.createElement('div');
@@ -92,15 +92,15 @@ const getVideoInsights = async (url, videoUrl) => {
     console.log('Fetch info from url', url)
     try {
         const response = await fetch(
-            url,
-            {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({"video_id": getYoutubeVideoId(videoUrl)})
-            }
+            url + "?video_id=" + getYoutubeVideoId(videoUrl),
+            // {
+            //     method: 'POST',
+            //     headers: {
+            //         'Accept': 'application/json',
+            //         'Content-Type': 'application/json'
+            //     },
+            //     body: JSON.stringify({"video_id": getYoutubeVideoId(videoUrl)})
+            // }
         );
         console.log('Got response', response)
         const data = await response.json();

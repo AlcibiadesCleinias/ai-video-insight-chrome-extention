@@ -11,6 +11,8 @@ class Settings(BaseSettings):
 
     OPENAI_TOKEN: str
 
+    API_CACHE_TTL: int = 60 * 10
+
     class Config:
         case_sensitive = True
 
