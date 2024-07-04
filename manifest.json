@@ -17,8 +17,8 @@
     {
       "matches": ["https://www.youtube.com/*"],
       "js": ["contentScripts/popup/main.js"],
-      "run_at": "document_end",
-      "all_frames": true
+      "all_frames" : false,
+      "run_at": "document_end"
     }
   ]
 }

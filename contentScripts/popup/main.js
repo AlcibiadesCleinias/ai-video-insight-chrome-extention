@@ -56,10 +56,39 @@ const throttle = (func, limit) => {
 };
 
 // TODO
+// URL -> title, description, transcript, first comments?
+// const getVideoDescription
+// const getVideoTitle
+// const getVideoTranscript
+
+const numberPattern = /\d+/g;
+const _getNumbersFromString = (likesString) => {
+    return likesString.match(numberPattern)
+}
+
+// @deprecated. Functionality moved to server side.
+// Fetch {description, likes, views} from clients side.
+// TODO: fetch transcript, comments? (kinda research).
 const fetchVideoInfo = async (url) => {
     console.log('Fetch info from url', url)
-    return "descriptiondescriptiondescription\n" +
-        "descriptiondescriptiondescriptiondescription"
+
+    const response = await fetch(url);
+    const html = await response.text();
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, 'text/html');
+    const meta = doc.querySelector('meta[property="og:description"]');
+    const description = meta ? meta.getAttribute('content') : 'No description available.';
+    console.log('Fetch description:', description)
+    const likes = doc.querySelector('.YtLikeButtonViewModelHost').querySelector('.yt-spec-button-shape-next.yt-spec-button-shape-next--tonal.yt-spec-button-shape-next--mono.yt-spec-button-shape-next--size-m.yt-spec-button-shape-next--icon-leading.yt-spec-button-shape-next--segmented-start')
+    console.log("likes", likes)
+    const views = doc.querySelector('.view-count').textContent
+    console.log("views", views)
+
+    return {
+        description,
+        likes: _getNumbersFromString(likes.ariaLabel),
+        views: _getNumbersFromString(views),
+    }
 };
 
 (function() {
@@ -100,7 +129,10 @@ const fetchVideoInfo = async (url) => {
                 popupTimeout = setTimeout(async () => {
                     const url = channelElement.querySelector('a').href;
                     showLoadingPopup(popup, e.clientX, e.clientY + 20);
-                    const content = await fetchVideoInfo(url);
+
+                    console.log('[mouseenter] Fetch video info from backend...')
+                    // TODO: add backend API call here.
+
                     updatePopup(popup, "DescriptionDescriptionDescription", "RatingRatingRating", "TLDR CommentsTLDR CommentsTLDR Comments");
                 }, FETCH_VIDEO_INFO_TIMEOUT_MS);
             });
