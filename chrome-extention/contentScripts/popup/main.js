@@ -2,6 +2,8 @@ const UPDATE_POPUP_POSITION_INTERVAL_MS = 100;
 // Kinda useless as we use "run_at": "document_end", in manifest.json.
 const OBSERVE_VIDEOS_TIMEOUT_MS = 50;
 const FETCH_VIDEO_INFO_TIMEOUT_MS = 50;
+// TODO: change on deployed.
+const BACKEND_VIDEO_INSIGHTS_API = 'http://localhost:8000/api/v1/ai-insights/youtube-videos/'
 
 const createPopup = () => {
     const popupElement = document.createElement('div');
@@ -26,9 +28,9 @@ const updatePopup = (popup, summary, rating, tldrComments) => {
     const summaryHtml = document.createElement('div');
     summaryHtml.innerHTML = `<strong>Summary:</strong> ${summary}<br>`;
     const ratingHtml = document.createElement('div');
-    ratingHtml.innerHTML = `<strong>Rating:</strong> ${rating}<br>`;
+    ratingHtml.innerHTML = `<strong>Clickbait Rating:</strong> ${rating}<br>`;
     const tldrCommentsHtml = document.createElement('div');
-    tldrCommentsHtml.innerHTML = `<strong>TLDR Comments:</strong> ${tldrComments}<br>`;
+    tldrCommentsHtml.innerHTML = `<strong>TL;DR Comments:</strong> ${tldrComments}<br>`;
     popup.appendChild(summaryHtml);
     popup.appendChild(ratingHtml);
     popup.appendChild(tldrCommentsHtml);
@@ -72,18 +74,51 @@ const fetchVideoInfo = async (url) => {
     const doc = parser.parseFromString(html, 'text/html');
     const meta = doc.querySelector('meta[property="og:description"]');
     const description = meta ? meta.getAttribute('content') : 'No description available.';
-    console.log('Fetch description:', description)
-    const likes = doc.querySelector('.YtLikeButtonViewModelHost').querySelector('.yt-spec-button-shape-next.yt-spec-button-shape-next--tonal.yt-spec-button-shape-next--mono.yt-spec-button-shape-next--size-m.yt-spec-button-shape-next--icon-leading.yt-spec-button-shape-next--segmented-start')
-    console.log("likes", likes)
-    const views = doc.querySelector('.view-count').textContent
-    console.log("views", views)
 
     return {
         description,
-        likes: _getNumbersFromString(likes.ariaLabel),
-        views: _getNumbersFromString(views),
+        // likes: _getNumbersFromString(likes.ariaLabel),
+        // views: _getNumbersFromString(views),
     }
 };
+
+function getYoutubeVideoId(url){
+    var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
+    var match = url.match(regExp);
+    return (match&&match[7].length==11)? match[7] : false;
+}
+
+const getVideoInsights = async (url, videoUrl) => {
+    console.log('Fetch info from url', url)
+    try {
+        const response = await fetch(
+            url + "?video_id=" + getYoutubeVideoId(videoUrl),
+            // {
+            //     method: 'POST',
+            //     headers: {
+            //         'Accept': 'application/json',
+            //         'Content-Type': 'application/json'
+            //     },
+            //     body: JSON.stringify({"video_id": getYoutubeVideoId(videoUrl)})
+            // }
+        );
+        console.log('Got response', response)
+        const data = await response.json();
+        return {
+          clickbait_ratio_summary: data.clickbait_ratio_summary,
+          video_summary: data.video_summary,
+          comments_summary: data.comments_summary,
+        }
+    } catch (error) {
+        console.log('Exception occured while fetching video insights. Return mock.', error)
+        const {description} = await fetchVideoInfo(videoUrl)
+        return {
+            clickbait_ratio_summary: "Failed to load clickbait ratio. Retry later.",
+            video_summary: description.slice(0, 70),
+            comments_summary: "No comments available.",
+        }
+    }
+}
 
 (function() {
     'use strict';
@@ -125,9 +160,9 @@ const fetchVideoInfo = async (url) => {
                     showLoadingPopup(popup, e.clientX, e.clientY + 20);
 
                     console.log('[mouseenter] Fetch video info from backend...')
-                    // TODO: add backend API call here.
+                    const {clickbait_ratio_summary, video_summary, comments_summary} = await getVideoInsights(BACKEND_VIDEO_INSIGHTS_API, url)
 
-                    updatePopup(popup, "DescriptionDescriptionDescription", "RatingRatingRating", "TLDR CommentsTLDR CommentsTLDR Comments");
+                    updatePopup(popup, video_summary, clickbait_ratio_summary, comments_summary);
                 }, FETCH_VIDEO_INFO_TIMEOUT_MS);
             });
 
