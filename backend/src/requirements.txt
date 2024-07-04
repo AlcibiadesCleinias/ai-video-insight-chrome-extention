@@ -4,3 +4,4 @@ aiohttp==3.9.5
 
 pytube==15.0.0
 youtube_comment_downloader==0.1.76
+youtube-transcript-api==0.6.2
