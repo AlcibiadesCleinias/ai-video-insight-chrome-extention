@@ -2,9 +2,9 @@ AI Video Insight - Google Chrome Extension
 ---
 
 # Could it be improved?
-- frontend <-> backend interaction improve: e.g. frontend -> send video id (or id), then checking API if each of summary 
+- frontend <-> backend interaction improve: e.g. frontend -> send video id (or id), then checking API if each part of summary 
 is ready, ratio is ready, etc.
-- send video ids to make backend preload all desirable info (cache-ahead)
+- send video ids to make backend preload all desirable info (~~refresh-ahead~~ cache-ahead), then get as soon as ready.
 - caching: {on API level, for data fetching concurrent process}
 - add simple gridy arch: use different models (+ locally deployed) and return fisrt answer available (with e.g. asyncio.FIRST_COMPLETED)
 
