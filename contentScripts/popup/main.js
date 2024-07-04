@@ -55,12 +55,6 @@ const throttle = (func, limit) => {
     };
 };
 
-// TODO
-// URL -> title, description, transcript, first comments?
-// const getVideoDescription
-// const getVideoTitle
-// const getVideoTranscript
-
 const numberPattern = /\d+/g;
 const _getNumbersFromString = (likesString) => {
     return likesString.match(numberPattern)
