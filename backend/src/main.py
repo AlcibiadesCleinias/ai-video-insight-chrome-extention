@@ -20,6 +20,7 @@ app.include_router(api_router, prefix=settings.API_V1)
 
 app.add_middleware(
     CORSMiddleware,
+    # TODO: change to settings.ORIGINS
     allow_origins=["*"],
     allow_methods=["*"],
     allow_headers=["*"],

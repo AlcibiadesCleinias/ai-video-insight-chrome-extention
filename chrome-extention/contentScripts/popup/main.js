@@ -28,9 +28,9 @@ const updatePopup = (popup, summary, rating, tldrComments) => {
     const summaryHtml = document.createElement('div');
     summaryHtml.innerHTML = `<strong>Summary:</strong> ${summary}<br>`;
     const ratingHtml = document.createElement('div');
-    ratingHtml.innerHTML = `<strong>Rating:</strong> ${rating}<br>`;
+    ratingHtml.innerHTML = `<strong>Clickbait Rating:</strong> ${rating}<br>`;
     const tldrCommentsHtml = document.createElement('div');
-    tldrCommentsHtml.innerHTML = `<strong>TLDR Comments:</strong> ${tldrComments}<br>`;
+    tldrCommentsHtml.innerHTML = `<strong>TL;DR Comments:</strong> ${tldrComments}<br>`;
     popup.appendChild(summaryHtml);
     popup.appendChild(ratingHtml);
     popup.appendChild(tldrCommentsHtml);
