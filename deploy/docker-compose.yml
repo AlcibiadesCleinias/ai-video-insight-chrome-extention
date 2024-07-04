@@ -1,0 +1,31 @@
+version: '3.8'
+
+volumes:
+  redis_data:
+
+x-app: &prod-service
+  logging:
+    driver: "json-file"
+    options:
+      max-file: "3"
+      max-size: "10m"
+  restart: "always"
+
+services:
+  backend: &prod-app
+    <<: *prod-service
+    build:
+      context: ../backend
+      dockerfile: ./Dockerfile
+    volumes:
+      - ../backend/src:/opt
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+
+  redis:
+    <<: *prod-service
+    image: redis:6.0.8-alpine
+    volumes:
+      - redis_data:/data
