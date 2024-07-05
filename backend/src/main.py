@@ -24,13 +24,13 @@ app.include_router(api_router, prefix=settings.API_V1)
 app.add_middleware(
     CORSMiddleware,
     # TODO: change to settings.ORIGINS
-    allow_origins=["*"],
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_origins=['*'],
+    allow_methods=['*'],
+    allow_headers=['*'],
 )
 
 
-@app.on_event("startup")
+@app.on_event('startup')
 async def startup():
-    redis = Redis(host=settings.REDIS_HOST, port=settings.REDIS_PORT, encoding="utf8", decode_responses=True)
-    FastAPICache.init(RedisBackend(redis), prefix="fastapi-cache")
+    redis = Redis(host=settings.REDIS_HOST, port=settings.REDIS_PORT, encoding='utf8', decode_responses=True)
+    FastAPICache.init(RedisBackend(redis), prefix='fastapi-cache')

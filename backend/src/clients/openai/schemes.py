@@ -7,7 +7,6 @@ class OpenAIChoices(BaseModel):
     text: str
 
 
-
 class OpenAIChatMessage(BaseModel):
     role: str
     content: str

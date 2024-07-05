@@ -7,16 +7,17 @@ from config.logger import get_app_logger
 
 logger = get_app_logger()
 
-COMMENTS_SUMMARY_NOT_AVAILABLE_TXT = "No comments available"
-VIDEO_SUMMARY_NOT_AVAILABLE_TXT = "Summary of the video is not available right now, retry latter"
-CLICKBAIT_RATIO_NOT_AVAILABLE_TXT = "Ratio is not available right now, retry latter"
+COMMENTS_SUMMARY_NOT_AVAILABLE_TXT = 'No comments available'
+VIDEO_SUMMARY_NOT_AVAILABLE_TXT = 'Summary of the video is not available right now, retry latter'
+CLICKBAIT_RATIO_NOT_AVAILABLE_TXT = 'Ratio is not available right now, retry latter'
 
 
 class AIVideoInsightClient:
     """The core client of the project, it should evaluate different strategies on how to get insights from the video
      {first ready, gridy within 5 seconds and etc}
 
-    Currently, in case of any fail it returns title + description [:MAX_LENGTH_SIMPLE_SUMMARY], first comment, and 0.5 clickbait ratio.
+    Currently, in case of any fail it returns title + description [:MAX_LENGTH_SIMPLE_SUMMARY], first comment,
+     and 0.5 clickbait ratio.
     """
     MAX_LENGTH_SIMPLE_SUMMARY = 100
 
@@ -62,4 +63,3 @@ class AIVideoInsightClient:
             video_summary=video_summary,
             comments_summary=comments_summary,
         )
-

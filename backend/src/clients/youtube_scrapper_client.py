@@ -11,11 +11,13 @@ from config.logger import get_app_logger
 
 logger = get_app_logger()
 
+
 @dataclass
 class YoutubeVideoInfo:
     title: str
     views: int
     likes: int
+
 
 @dataclass
 class YoutubeVideoComment:
@@ -23,25 +25,30 @@ class YoutubeVideoComment:
     text: str
     votes: int
 
+
 @dataclass
 class YoutubeVideoData:
     info: YoutubeVideoInfo
     comments: List[YoutubeVideoComment]
     transcript: Optional[str]
 
-number_extract_pattern = "\\d+"
+
+number_extract_pattern = '\\d+'
 
 
 class YoutubeScrapperClient:
     """Client for scrapping youtube video info, comments and transcript.
     Currently, it uses sync packagges [blocking code].
     """
+
     def _parse_likes_number(self, yt: YouTube) -> int:
-        likes_text = yt.initial_data['contents'] \
-            ['twoColumnWatchNextResults']['results']['results']['contents'][0]['videoPrimaryInfoRenderer'] \
-            ['videoActions']['menuRenderer']['topLevelButtons'][0]['segmentedLikeDislikeButtonViewModel'] \
-            ['likeButtonViewModel']['likeButtonViewModel']['toggleButtonViewModel']['toggleButtonViewModel'] \
-            ['defaultButtonViewModel']['buttonViewModel']['accessibilityText']
+        likes_text = (
+            yt.initial_data['contents']['twoColumnWatchNextResults']['results']['results']['contents'][0][
+                'videoPrimaryInfoRenderer']['videoActions']['menuRenderer']['topLevelButtons'][0][
+                'segmentedLikeDislikeButtonViewModel']['likeButtonViewModel']['likeButtonViewModel'][
+                'toggleButtonViewModel']['toggleButtonViewModel']['defaultButtonViewModel']['buttonViewModel'][
+                'accessibilityText']
+        )
         likes_number = re.findall(number_extract_pattern, likes_text)
         return int(''.join(likes_number))
 
@@ -50,6 +57,7 @@ class YoutubeScrapperClient:
         try:
             likes_number = self._parse_likes_number(yt)
         except Exception as e:
+            logger.error('Failed to parse likes number: %s', e)
             likes_number = -1
 
         return YoutubeVideoInfo(
@@ -58,10 +66,9 @@ class YoutubeScrapperClient:
             likes=likes_number,
         )
 
-    async def get_video_comments(self, video_id: str, max_comments: int=5) -> List[YoutubeVideoComment]:
+    async def get_video_comments(self, video_id: str, max_comments: int = 5) -> List[YoutubeVideoComment]:
         downloader = YoutubeCommentDownloader()
-        comments = downloader.get_comments_from_url(
-            f'https://youtu.be//{video_id}', sort_by=SORT_BY_POPULAR)
+        comments = downloader.get_comments_from_url(f'https://youtu.be//{video_id}', sort_by=SORT_BY_POPULAR)
         serialized_comments = []
         for comment in islice(comments, max_comments):
             serialized_comments.append(
@@ -95,4 +102,3 @@ class YoutubeScrapperClient:
             video_transcript = None
         logger.info('Fetched video transcript: %s', video_transcript)
         return YoutubeVideoData(info=video_info, comments=video_comments, transcript=video_transcript)
-

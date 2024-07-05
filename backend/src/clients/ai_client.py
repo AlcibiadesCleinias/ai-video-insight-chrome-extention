@@ -11,5 +11,6 @@ class AIClientABC(ABC):
         return NotImplemented
 
     async def get_click_bait_ratio_with_summary(
-            self, title: str, video_summary: str, likes: float, views: float, comments_total: Optional[int]=None) -> str:
+            self, title: str, video_summary: str, likes: float, views: float, comments_total: Optional[int] = None,
+    ) -> str:
         return NotImplemented

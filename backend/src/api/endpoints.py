@@ -13,6 +13,8 @@ logger = get_app_logger()
 router = APIRouter()
 
 # TODO: add caching {fetched data from youtube, ai insights responses}.
+
+
 @router.get(
     '/youtube-videos/',
     description=(
