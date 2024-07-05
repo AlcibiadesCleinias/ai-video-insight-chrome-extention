@@ -3,7 +3,7 @@ const UPDATE_POPUP_POSITION_INTERVAL_MS = 100;
 const OBSERVE_VIDEOS_TIMEOUT_MS = 50;
 const FETCH_VIDEO_INFO_TIMEOUT_MS = 50;
 // TODO: change on deployed.
-const BACKEND_VIDEO_INSIGHTS_API = 'http://localhost:8000/api/v1/ai-insights/youtube-videos/'
+const BACKEND_VIDEO_INSIGHTS_API = 'https://zk-task.why-nft.com/api/v1/ai-insights/youtube-videos/'
 
 const createPopup = () => {
     const popupElement = document.createElement('div');
