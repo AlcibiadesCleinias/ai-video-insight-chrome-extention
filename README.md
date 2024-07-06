@@ -1,6 +1,8 @@
 AI Video Insight - Google Chrome Extension [not published]
 ---
-Google Chrome extension for Video Summary, Clickbait Rating, TL;DR of Comments, and more!
+Google Chrome extension with popup of Video Summary, Clickbait Rating, TL;DR of Comments on YouTube search page view.
+
+Demo Video: https://youtu.be/CIYABA9aeCU
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -13,6 +15,9 @@ Google Chrome extension for Video Summary, Clickbait Rating, TL;DR of Comments, 
 - [ToDo](#todo)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+# Motivation
+Ref to technical task (max 10-hours): https://eightify.notion.site/Test-task-for-developer-34ba684a18a643158996a6503bc43b25 
 
 # Ways to Improved
 - frontend <-> backend interaction improve: e.g. frontend -> send video id (or id), then checking API if each part of summary 
